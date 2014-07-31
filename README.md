@@ -6,4 +6,10 @@ format to the current time zone.
     $ ./utctonow.py "Jul 31 13:48:34"
     Jul 31 2014 07:48:34 MDT
 
+## Prereqs
+
+Install the prereqs by doing:
+
+    pip install -r requirements.txt
+
 
