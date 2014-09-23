@@ -10,7 +10,9 @@ Assumes the DATETIME is in UTC format.
 Arguments:
 
     DATETIME    quoted datetime string in kernel log format
-                e.g.: "Jul 31 13:48:34"
+                e.g.: "Jul 31 13:48:34". If not in that format,
+                utctonow.py will try to guess.
+
 
 """
 from __future__ import print_function
@@ -36,7 +38,16 @@ def tonow(s):
     fmt = 'YYYY MMM DD HH:mm:ss'
     year = arrow.utcnow().year
     timestr = '{0} {1}'.format(year, s)
-    return arrow.get(timestr, fmt).to('local')
+    try:
+        return arrow.get(timestr, fmt).to('local')
+    except arrow.parser.ParserError:
+        # If it's in a different format, just let
+        # arrow use the default parsing
+
+        # Explicitly specify UTC
+        if not s.endswith("UTC"):
+            s += " UTC"
+        return arrow.get(s).to('local')
 
 if __name__ == '__main__':
     arguments = docopt(__doc__)
